@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wordpress.mariadb.fullname" . }}
+  labels:
+    {{- include "wordpress.mariadb.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.mariadb.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wordpress.mariadb.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "wordpress.mariadb.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: mariadb
+        image: "{{ .Values.mariadb.image.repository }}:{{ .Values.mariadb.image.tag }}"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ default (include "wordpress.fullname" .) .Values.wordpress.existingSecret }}
+              key: mariadb-root-password
+        - name: MYSQL_DATABASE
+          value: {{ .Values.mariadb.auth.database | quote }}
+        - name: MYSQL_USER
+          value: {{ .Values.mariadb.auth.username | quote }}
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ default (include "wordpress.fullname" .) .Values.wordpress.existingSecret }}
+              key: mariadb-password
+        volumeMounts:
+        - name: mariadb-storage
+          mountPath: /var/lib/mysql
+        - name: secret-volume
+          mountPath: /etc/mariadb/secrets
+          readOnly: true
+      volumes:
+      - name: mariadb-storage
+        persistentVolumeClaim:
+          claimName: {{ include "wordpress.mariadb.fullname" . }}
+      - name: secret-volume
+        secret:
+          secretName: {{ default (include "wordpress.fullname" .) .Values.wordpress.existingSecret }}

@@ -1,0 +1,7 @@
+APP_NAME=wordpress
+HELM_MAJOR=1
+HELM_MINOR=0
+REVISION=$((`git rev-list --count @` + 1))
+HELM_FULL_VERSION="$HELM_MAJOR.$HELM_MINOR.$REVISION"
+
+REGISTRIES=harbor.vn.linuxguru.net/linuxguru
