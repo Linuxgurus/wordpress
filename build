@@ -25,8 +25,7 @@ push_helm_chart() {
   local chart_package="${app_name}-${version}.tgz"
   for registry in ${registries//,/ }; do
     if [[ -f "$chart_package" ]]; then
-      helm push $chart_package "oci://$registry"
-      echo "Pushed Helm chart to ${registry}"
+      helm push $chart_package "oci://$registry" && echo "Pushed Helm chart to ${registry}"
     else
       echo "Error: Chart package ${chart_package} not found!" >&2
     fi
