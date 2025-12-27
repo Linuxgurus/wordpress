@@ -4,4 +4,5 @@ resource "helm_release" "helm" {
   repository = var.repository
   chart      = var.chart
   values     = [yamlencode(local.helm_values)]
+  create_namespace = true 
 }
