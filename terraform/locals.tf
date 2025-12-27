@@ -23,7 +23,7 @@ locals {
       ]
       tls = [
         {
-          secretName = "cert-${replace(var.hostname, ".", "-")}"
+          secretName = "cert-${var.hostname}"
           hosts      = [var.hostname]
         }
       ]

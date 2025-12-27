@@ -14,7 +14,9 @@ A comprehensive Helm chart for deploying WordPress on Kubernetes, including Mari
     - [From Source](#from-source)
       - [1. Clone the repository](#1-clone-the-repository)
       - [2. Install the chart](#2-install-the-chart)
-    - [3. Verify the deployment](#3-verify-the-deployment)
+    - [Verify the deployment](#verify-the-deployment)
+  - [Terraform Module](#terraform-module)
+    - [Example Usage](#example-usage)
   - [Configuration](#configuration)
   - [Persistence](#persistence)
   - [Exposure](#exposure)
@@ -41,12 +43,16 @@ The chart is designed to be flexible, supporting various ingress options, persis
 
 ```text
 .
-├── chart/              # Main Helm chart directory
-│   ├── charts/         # Subcharts (if any)
-│   ├── templates/      # Kubernetes manifest templates
-│   ├── Chart.yaml      # Chart metadata
-│   ├── values.yaml     # Default configuration values
-│   └── README.md       # Chart-specific documentation
+├── charts/             # Main Helm chart directory
+│   └── wordpress/      # WordPress chart files
+│       ├── templates/  # Kubernetes manifest templates
+│       ├── Chart.yaml  # Chart metadata
+│       ├── values.yaml # Default configuration values
+│       └── README.md   # Chart-specific documentation
+├── terraform/          # Terraform module for Helm deployment
+│   ├── helm.tf         # Helm release resource
+│   ├── variables.tf    # Module variables
+│   └── README.md       # Terraform module documentation
 ├── AppInfo.txt         # Application metadata for build processes
 ├── CODE_OF_CONDUCT.md  # Community guidelines
 ├── CONTRIBUTING.md     # Contribution guidelines
@@ -82,11 +88,31 @@ To install the chart with the release name `my-wordpress`:
 helm install my-wordpress ./charts/wordpress
 ```
 
-### 3. Verify the deployment
+### Verify the deployment
 
 ```bash
 kubectl get pods
 ```
+
+## Terraform Module
+
+A Terraform module is provided in the `terraform/` directory to simplify the deployment of this chart.
+
+### Example Usage
+
+```hcl
+module "wordpress" {
+  source = "./terraform"
+
+  name          = "my-wordpress"
+  namespace     = "wordpress"
+  hostname      = "wordpress.example.com"
+  ingress_class = "nginx"
+  cert_issuer   = "letsencrypt-prod"
+}
+```
+
+For more details, see the [Terraform module documentation](./terraform/README.md).
 
 ## Configuration
 
