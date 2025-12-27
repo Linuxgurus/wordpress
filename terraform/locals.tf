@@ -1,4 +1,5 @@
 locals {
+  hosts = concat([var.hostname], var.extra_hostnames)
   helm_values = {
     wordpress = {
       serverName = var.hostname
@@ -11,8 +12,8 @@ locals {
         "external-dns.alpha.kubernetes.io/hostname" = var.hostname
       }
       hosts = [
-        {
-          host = var.hostname
+        for host in local.hosts : {
+          host = host
           paths = [
             {
               path     = "/"
@@ -24,7 +25,7 @@ locals {
       tls = [
         {
           secretName = "cert-${var.hostname}"
-          hosts      = [var.hostname]
+          hosts      = local.hosts
         }
       ]
     }

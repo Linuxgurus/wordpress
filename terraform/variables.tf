@@ -27,6 +27,12 @@ variable "hostname" {
   type        = string
 }
 
+variable "extra_hostnames" {
+  description = "The host names this site should be available under"
+  type = list
+  default = []
+}
+
 variable "cert_issuer" {
   description = "The internal CA to use"
   type        = string
