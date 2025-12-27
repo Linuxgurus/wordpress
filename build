@@ -5,7 +5,7 @@ main() {
   update_chart_version "$HELM_FULL_VERSION"
   git add -A
   message=$(get_commit_message)
-  echo "$mesasge"
+  echo "$message"
   git commit charts/ build AppInfo.txt -m "$message" && git push
   helm package charts/wordpress
   push_helm_chart "$APP_NAME" "$HELM_FULL_VERSION" "$REGISTRIES"
