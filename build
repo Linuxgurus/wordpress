@@ -3,9 +3,21 @@
 main() {
   source AppInfo.txt
   update_chart_version "$HELM_FULL_VERSION"
-  git commit charts/ build AppInfo.txt -m "autocommit on $(date)" # && git push
+  git add -A
+  message=$(get_commit_message)
+  echo "$mesasge"
+  git commit charts/ build AppInfo.txt -m "$message" && git push
   helm package charts/wordpress
   push_helm_chart "$APP_NAME" "$HELM_FULL_VERSION" "$REGISTRIES"
+}
+
+get_commit_message() {
+
+  if command -v lazycommit > /dev/null; then
+    lazycommit  commit
+  else
+    echo "autocommit on $(date)"
+  fi
 }
 
 update_chart_version() {

@@ -10,6 +10,15 @@ A Helm chart for deploying WordPress on Kubernetes with MariaDB.
 
 ## Installation
 
+### From Helm Repository
+
+```bash
+helm repo add wordpress http://linuxgurus.github.io/wordpress
+helm install my-release wordpress/wordpress
+```
+
+### From Source
+
 ```bash
 helm install my-release .
 ```
@@ -99,7 +108,7 @@ The chart provides persistence for:
 
 ## Gateway API Support
 
-This chart includes optional support for Kubernetes Gateway API via `httpRoute`. Ensure you have a Gateway API compatible controller installed.
+This chart includes optional support for Kubernetes Gateway API via `httpRoute`. Ensure you have a Gateway API compatible controller installed. Old fashioned nginx-ingress is supported as well.
 
 ## License
 
